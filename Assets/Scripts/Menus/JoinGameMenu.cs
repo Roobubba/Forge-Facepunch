@@ -47,7 +47,7 @@ public class JoinGameMenu : MonoBehaviour {
 	private async Task RefreshLobbies()
 	{
 		Steamworks.Data.LobbyQuery lobbyQuery = new Steamworks.Data.LobbyQuery();
-		lobbyQuery.FilterDistanceClose();
+		//lobbyQuery.FilterDistanceClose();
 		var lobbyList = await lobbyQuery.RequestAsync();
 		if (lobbyList == null)
 		{
@@ -57,14 +57,17 @@ public class JoinGameMenu : MonoBehaviour {
 
 		foreach (var lobby in lobbyList)
 		{
-			if (!lobbyUIController.AddLobby(lobby))
+			if (lobby.GetData("FNR-FP") == "blob")
 			{
-				BMSLog.Log("Could not add lobby to lobbyUIController: " + lobby.Id.Value.ToString());
-				continue;
-			}
-			else
-			{
-				BMSLog.Log("Added lobby to lobbyUIController: " + lobby.Id.Value.ToString());
+				if (!lobbyUIController.AddLobby(lobby))
+				{
+					BMSLog.Log("Could not add lobby to lobbyUIController: " + lobby.Id.Value.ToString());
+					continue;
+				}
+				else
+				{
+					BMSLog.Log("Added lobby to lobbyUIController: " + lobby.Id.Value.ToString());
+				}
 			}
 		}
 	}
