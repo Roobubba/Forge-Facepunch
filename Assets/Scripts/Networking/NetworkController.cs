@@ -163,7 +163,10 @@ public class NetworkController : Controller
 			return;
 		}
 		BMSLog.Log("Created Lobby Async: lobby Id = " + lobby.Value.Id);
-		this.lobby = lobby ?? default;
+		var lobbyVal = lobby.Value;
+		lobbyVal.SetPublic();
+		lobbyVal.SetData("FNR-FP","blob");
+		this.lobby = lobbyVal;
 	}
 
 	private void OnLobbyMemberJoined(Steamworks.Data.Lobby lobby, Friend friend)

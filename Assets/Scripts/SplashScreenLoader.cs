@@ -11,6 +11,11 @@ public class SplashScreenLoader : MonoBehaviour {
 	[SerializeField]
 	private GameObject gameControllerPrefab;
 
+	// Roo's amazing unbelievable stunning wonderful project
+	//private const int STEAM_APP_ID = 1090590;
+	// Spacewar steam test project
+	private const int STEAM_APP_ID = 480;
+
 	private void Awake()
 	{
 		DontDestroyOnLoad(this);
@@ -21,8 +26,7 @@ public class SplashScreenLoader : MonoBehaviour {
 		try
 		{
 			BeardedManStudios.Forge.Logging.BMSLog.Log("Initialising Steam Client");
-			SteamClient.Init(1090590);
-			//SteamClient.Init(480);
+			SteamClient.Init(STEAM_APP_ID);
 		}
 		catch (System.Exception e)
 		{

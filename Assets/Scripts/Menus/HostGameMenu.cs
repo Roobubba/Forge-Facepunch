@@ -7,7 +7,6 @@ using TMPro;
 using System.Threading.Tasks;
 using Steamworks;
 
-
 public class HostGameMenu : MonoBehaviour {
 
 	public Button playButton; //So we can update the text on the button to make it clear we're playing solo or with friends
