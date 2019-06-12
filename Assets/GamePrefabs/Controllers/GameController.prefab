@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1173690585168156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4778159970208996}
+  - component: {fileID: 114157905863421262}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4778159970208996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173690585168156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114157905863421262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173690585168156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46c391c8a1fad26499b111b3ef39ff96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pdbReaderPrefab: {fileID: 1947121016599742, guid: ca9c6d9373b493d43b2530d0aa0c2ac0,
+    type: 3}
+  pdbControllerPrefab: {fileID: 1979963174690812, guid: b424b6895df339440b6a2da240335fbd,
+    type: 3}
+  ligandControllerPrefab: {fileID: 1909745226750020, guid: 00d43b26172e5794b94fbcc071cac4dc,
+    type: 3}
+  pdbFileListControllerPrefab: {fileID: 1367728709946690, guid: 8b5f6bf266f22184eb6370eab6883553,
+    type: 3}
+  materialControllerPrefab: {fileID: 1227799007295598, guid: d6c9e4389e978664d9c18653023acf12,
+    type: 3}
+  levelManagerPrefab: {fileID: 1616310335888272, guid: e7d0901030e83b24fa82c94ae33183d6,
+    type: 3}
+  soundControllerPrefab: {fileID: 1211289340177326, guid: f5e6ce757bc5aef4e8358139be1b5ac1,
+    type: 3}
+  hudControllerPrefab: {fileID: 412331152508236362, guid: 3624522b38524e54582f6abe3e100684,
+    type: 3}
+  cursorLockControllerPrefab: {fileID: 7995328706540323843, guid: b25cf0332dcdd2644a20fae734ab21ff,
+    type: 3}
+  gameplayControllerPrefab: {fileID: 1823303817625088471, guid: e23a3870211cceb44aca20f9d43dcd0d,
+    type: 3}
+  spawnPointCalculatorPrefab: {fileID: 2439797164896557016, guid: ab48244bf94c22642bcdf56391d7280e,
+    type: 3}
+  networkControllerPrefab: {fileID: 180, guid: 2cb889c1b5096874eabd2c44b63958d3, type: 3}
+  inGameMenuControllerPrefab: {fileID: 1802229662314916, guid: e102887ca5814e94599d5f432b018f8e,
+    type: 3}
