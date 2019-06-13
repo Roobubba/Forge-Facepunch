@@ -84,7 +84,7 @@ namespace BeardedManStudios.Forge.Networking
 			try
 			{
 				// TODO: Check order of P2P Session requests vs packet reading. Must be accepted before attempting to read network
-				SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
+				//SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
 
 				ushort clientPort = DEFAULT_PORT;
 
@@ -152,7 +152,7 @@ namespace BeardedManStudios.Forge.Networking
 		public override void Disconnect(bool forced)
 		{
 			Logging.BMSLog.Log("<color=cyan>FacepunchP2P client disconnecting...</color>");
-			SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
+			//SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
 
 			if (Client == null)
 				return;
@@ -384,7 +384,8 @@ namespace BeardedManStudios.Forge.Networking
 			Send(new Binary(Time.Timestep, false, buffer, Receivers.Server, MessageGroupIds.AUTHENTICATION_RESPONSE, false), true);
 		}
 
-		/// <summary>
+		/*
+		 * /// <summary>
 		/// Callback for SteamNetworking.OnP2PSessionRequest
 		/// Currently accepts all P2PSession requests
 		/// </summary>
@@ -398,6 +399,7 @@ namespace BeardedManStudios.Forge.Networking
 				Logging.BMSLog.LogWarning("Could not accept P2P Session with User: " + requestorSteamId.Value);
 			}
 		}
+		*/
 
 		/// <summary>
 		/// Callback for user auth. Disconnects the user from an invalid server.

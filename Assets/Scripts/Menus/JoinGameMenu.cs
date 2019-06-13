@@ -70,6 +70,31 @@ public class JoinGameMenu : MonoBehaviour {
 				}
 			}
 		}
+
+		foreach (Friend friend in SteamFriends.GetFriends())
+		{
+			var gameinfo = friend.GameInfo;
+			if (gameinfo.HasValue)
+			{
+				var friendLobby = gameinfo.Value.Lobby;
+				if (friendLobby.HasValue)
+				{
+					if (friendLobby.Value.GetData("FNR-FP") == "blob")
+					{
+						if (!lobbyUIController.AddLobby(friendLobby.Value))
+						{
+							BMSLog.Log("Could not add lobby to lobbyUIController: " + friendLobby.Value.Id.Value.ToString());
+							continue;
+						}
+						else
+						{
+							BMSLog.Log("Added lobby to lobbyUIController: " + friendLobby.Value.Id.Value.ToString());
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 
