@@ -33,6 +33,10 @@ public class LobbyUIController : MonoBehaviour
 
 			return true;
 		}
+		else
+		{
+			BeardedManStudios.Forge.Logging.BMSLog.Log("lobbies list already contains lobby: " + lobby.Id);
+		}
 		return false;
 	}
 	
