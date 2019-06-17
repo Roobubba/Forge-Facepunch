@@ -211,10 +211,10 @@ public class JoinGameMenu : MonoBehaviour {
 
 		foreach (var lobby in lobbyList)
 		{
-			//if (lobby.GetData("FNR-FP") == "blob")
-			//{
+			if (lobby.GetData("FNR-FP") == "blob")
+			{
 				AddServer(lobby);
-			//}
+			}
 		}
 	}
 }

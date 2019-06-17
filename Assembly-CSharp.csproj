@@ -179,7 +179,6 @@
     <Compile Include="Assets\Scripts\Menus\FacepunchServerListEntry.cs" />
     <Compile Include="Assets\Scripts\Menus\HostGameMenu.cs" />
     <Compile Include="Assets\Scripts\Menus\JoinGameMenu.cs" />
-    <Compile Include="Assets\Scripts\Menus\LobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Menus\PlayerInServerListEntry.cs" />
     <Compile Include="Assets\Scripts\Networking\NetworkController.cs" />
