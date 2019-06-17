@@ -21,16 +21,23 @@ public class LobbyUIController : MonoBehaviour
 	{
 		if (lobbies.Count > 9)
 			return false;
+		if (!lobbies.Contains(lobby))
+		{
+			lobbies.Add(lobby);
+			int newIndex = lobbies.Count - 1;
+			Text newDisplayText = lobbyButtons[newIndex].GetComponentInChildren<Text>();
+			newDisplayText.text = lobby.Id.Value.ToString();
+			lobbyButtons[newIndex].onClick.AddListener(() => {
+				networkController.ConnectToLobby(lobby);
+			});
 
-		lobbies.Add(lobby);
-		int newIndex = lobbies.Count - 1;
-		Text newDisplayText = lobbyButtons[newIndex].GetComponentInChildren<Text>();
-		newDisplayText.text = lobby.Id.Value.ToString();
-		lobbyButtons[newIndex].onClick.AddListener(() => {
-			networkController.ConnectToLobby(lobby);
-		});
-
-		return true;
+			return true;
+		}
+		else
+		{
+			BeardedManStudios.Forge.Logging.BMSLog.Log("lobbies list already contains lobby: " + lobby.Id);
+		}
+		return false;
 	}
 	
 	public void ClearLobbies()
