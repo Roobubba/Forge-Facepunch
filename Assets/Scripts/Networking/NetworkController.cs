@@ -54,7 +54,6 @@ public class NetworkController : Controller
 		SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
 		SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
 		SteamMatchmaking.OnLobbyDataChanged += OnLobbyDataChanged;
-
 	}
 
 	/// <summary>
@@ -72,7 +71,6 @@ public class NetworkController : Controller
 			((FacepunchP2PClient)steamP2PClient).bindSuccessful -= OnClientBindSuccessful;
 			((FacepunchP2PClient)steamP2PClient).serverAccepted -= OnClientServerAccepted;
 			((FacepunchP2PClient)steamP2PClient).disconnected -= OnClientDisconnected;
-
 		}
 	}
 	private void UnsubscribeP2PServerEvents()
@@ -94,8 +92,6 @@ public class NetworkController : Controller
 		SteamMatchmaking.OnLobbyDataChanged -= OnLobbyDataChanged;
 		UnsubscribeP2PClientEvents();
 		UnsubscribeP2PServerEvents();
-		//lobby.Leave();
-		//lobby = default;
 	}
 
 	public void CancelGame(bool loadMenu = true)
@@ -111,7 +107,9 @@ public class NetworkController : Controller
 			networkManager.Disconnect();
 			haveNetworkManager = false;
 		}
-		if (loadMenu) LevelManager.LoadMainMenu();
+
+		if (loadMenu)
+			LevelManager.LoadMainMenu();
 	}
 
 	private NetworkManager GetNetworkManager()
@@ -120,6 +118,7 @@ public class NetworkController : Controller
 		{
 			networkManagerGO = Instantiate(networkManagerPrefab) as GameObject;
 		}
+
 		haveNetworkManager = true;
 		return NetworkManager.Instance;
 	}
@@ -132,6 +131,7 @@ public class NetworkController : Controller
 		{
 			networkManager = GetNetworkManager();
 		}
+
 		steamP2PServer = new FacepunchP2PServer(4);
 		networkManager.Initialize(steamP2PServer);
 		((FacepunchP2PServer)steamP2PServer).playerTimeout += OnServerPlayerTimeout;
@@ -148,7 +148,6 @@ public class NetworkController : Controller
 		levelManager.LoadLevel("02aLobbyHost");
 	}
 
-
 	private async void CreateLobbyAsync()
 	{
 		await CreateLobby();
@@ -162,6 +161,7 @@ public class NetworkController : Controller
 			BMSLog.Log("Error creating lobby");
 			return;
 		}
+
 		BMSLog.Log("Created Lobby Async: lobby Id = " + lobby.Value.Id);
 		var lobbyVal = lobby.Value;
 		lobbyVal.SetPublic();
@@ -261,17 +261,15 @@ public class NetworkController : Controller
 	
 	private async Task JoinLobby(Steamworks.Data.Lobby lobbyToJoin)
 	{
-		RoomEnter x = await lobbyToJoin.Join();
-		if (x != RoomEnter.Success)
+		RoomEnter roomEnter = await lobbyToJoin.Join();
+		if (roomEnter != RoomEnter.Success)
 		{
-			BMSLog.Log("Error connecting to lobby returned: " + x.ToString());
+			BMSLog.Log("Error connecting to lobby returned: " + roomEnter.ToString());
 			return;
 		}
 		this.lobby = lobbyToJoin;
 		BMSLog.Log("Connected to lobby, owner.Id = " + lobbyToJoin.Owner.Id.Value);
 		ConnectToHost(lobbyToJoin.Owner.Id, null);
-
-
 	}
 
 	public void ConnectToHost(SteamId hostSteamId, UnityEngine.UI.Text connectionText)
@@ -284,15 +282,16 @@ public class NetworkController : Controller
 		}
 		networkManager = GetNetworkManager();
 		steamP2PClient = new FacepunchP2PClient();
-		networkManager.Initialize(steamP2PClient);
 		((FacepunchP2PClient)steamP2PClient).bindSuccessful += OnClientBindSuccessful;
 		((FacepunchP2PClient)steamP2PClient).serverAccepted += OnClientServerAccepted;
 		((FacepunchP2PClient)steamP2PClient).disconnected += OnClientDisconnected;
 		((FacepunchP2PClient)steamP2PClient).Connect(hostSteamId);
+
+		// Moved initialize after Connect() call and callbacks and this along with the 1 cycle delay on setting up the ReadNetwork thread seems to stop the
+		// SteamNetworking NRE problems.
+		networkManager.Initialize(steamP2PClient);
 		Connected(steamP2PClient);
-
 	}
-
 
 	/// <summary>
 	/// 
@@ -348,7 +347,6 @@ public class NetworkController : Controller
 		}
 	}
 
-
 	#region FacepunchP2PServer Events
 
 	private void OnServerPlayerTimeout(NetworkingPlayer player, NetWorker sender)
@@ -393,7 +391,7 @@ public class NetworkController : Controller
 	}
 	#endregion
 
-	#region FacepuncP2PClient Events
+	#region FacepunchP2PClient Events
 	
 	private void OnClientBindSuccessful(NetWorker server)
 	{
@@ -433,6 +431,4 @@ public class NetworkController : Controller
 	}
 
 	#endregion
-
-
 }

@@ -33,7 +33,6 @@ namespace BeardedManStudios.Forge.Networking
 
 			// Listen for clients wishing to start P2PConnections
 			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
-			SteamNetworking.OnP2PConnectionFailed += OnP2PConnectionFailed;
 		}
 
 		/// <summary>
@@ -190,7 +189,6 @@ namespace BeardedManStudios.Forge.Networking
 			Logging.BMSLog.Log("<color=cyan>FacepunchP2P server disconnecting...</color>");
 
 			SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
-			SteamNetworking.OnP2PConnectionFailed -= OnP2PConnectionFailed;
 			readThreadCancel = true;
 
 			lock (Players)
@@ -655,17 +653,6 @@ namespace BeardedManStudios.Forge.Networking
 			{
 				Logging.BMSLog.LogWarning("Could not accept P2P Session with User: " + requestorSteamId.Value);
 			}
-		}
-
-		/// <summary>
-		/// Callback for SteamNetorking.OnP2PConnectionFailed
-		/// Disconnect the user if they're in our list and show any errors
-		/// </summary>
-		/// <param name="requestorSteamId"></param>
-		private void OnP2PConnectionFailed(SteamId requestorSteamId)
-		{
-			Logging.BMSLog.Log("OnP2PConnectionFailed called. Remote steamId: " + requestorSteamId.Value.ToString());
-			Disconnect(steamPlayers[requestorSteamId], true);
 		}
 
 		/// <summary>
