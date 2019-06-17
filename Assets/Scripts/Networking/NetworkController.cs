@@ -38,6 +38,10 @@ public class NetworkController : Controller
 	//private NetWorker steamP2PServer = null;
 
 	private Steamworks.Data.Lobby lobby;
+	public Steamworks.Data.Lobby GetLobby()
+	{
+		return lobby;
+	}
 
 	private LevelManager levelManager;
 	private GameController gameController;
@@ -143,9 +147,6 @@ public class NetworkController : Controller
 		((FacepunchP2PServer)steamP2PServer).Host();
 		Connected(steamP2PServer);
 		CreateLobbyAsync();
-		
-		//Load 02aLobbyHost scene
-		levelManager.LoadLevel("02aLobbyHost");
 	}
 
 	private async void CreateLobbyAsync()
@@ -155,18 +156,21 @@ public class NetworkController : Controller
 
 	private async Task CreateLobby()
 	{
-		Steamworks.Data.Lobby? lobby = await SteamMatchmaking.CreateLobbyAsync(4);
-		if (!lobby.HasValue)
+		Steamworks.Data.Lobby? lobbyCreated = await SteamMatchmaking.CreateLobbyAsync(64);
+		if (!lobbyCreated.HasValue)
 		{
 			BMSLog.Log("Error creating lobby");
 			return;
 		}
 
-		BMSLog.Log("Created Lobby Async: lobby Id = " + lobby.Value.Id);
-		var lobbyVal = lobby.Value;
+		BMSLog.Log("Created Lobby Async: lobby Id = " + lobbyCreated.Value.Id);
+		var lobbyVal = lobbyCreated.Value;
 		lobbyVal.SetPublic();
 		lobbyVal.SetData("FNR-FP","blob");
 		this.lobby = lobbyVal;
+
+		//Load 02aLobbyHost scene
+		levelManager.LoadLevel("02aLobbyHost");
 	}
 
 	private void OnLobbyMemberJoined(Steamworks.Data.Lobby lobby, Friend friend)
@@ -224,8 +228,6 @@ public class NetworkController : Controller
 	public void JoinGame()
 	{
 		isHosting = false;
-
-
 
 		//Load 02bLobbyJoin scene
 		levelManager.LoadLevel("02bLobbyJoin");

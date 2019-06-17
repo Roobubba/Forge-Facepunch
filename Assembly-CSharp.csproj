@@ -65,10 +65,6 @@
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\PlayerControllerBehavior.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Generated\UserGenerated\PlayerControllerNetworkObject.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\BMSUnityExtensions.cs" />
-    <Compile Include="Assets\Bearded Man Studios Inc\Scripts\FacepunchMultiplayerMenu\FacepunchJoinMenu.cs" />
-    <Compile Include="Assets\Bearded Man Studios Inc\Scripts\FacepunchMultiplayerMenu\FacepunchMultiplayerMenu.cs" />
-    <Compile Include="Assets\Bearded Man Studios Inc\Scripts\FacepunchMultiplayerMenu\FacepunchServerListEntry.cs" />
-    <Compile Include="Assets\Bearded Man Studios Inc\Scripts\FacepunchMultiplayerMenu\FacepunchSteamworksController.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\ForgeGeneratedField.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\GeneratedInterpolAttribute.cs" />
     <Compile Include="Assets\Bearded Man Studios Inc\Scripts\GeneratedRPCAttribute.cs" />
@@ -180,10 +176,12 @@
     <Compile Include="Assets\Scripts\Controllers\HUDController.cs" />
     <Compile Include="Assets\Scripts\Controllers\LevelManager.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Menus\FacepunchServerListEntry.cs" />
     <Compile Include="Assets\Scripts\Menus\HostGameMenu.cs" />
     <Compile Include="Assets\Scripts\Menus\JoinGameMenu.cs" />
     <Compile Include="Assets\Scripts\Menus\LobbyUIController.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Menus\PlayerInServerListEntry.cs" />
     <Compile Include="Assets\Scripts\Networking\NetworkController.cs" />
     <Compile Include="Assets\Scripts\SplashScreenLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
