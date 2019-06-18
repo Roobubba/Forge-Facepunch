@@ -137,7 +137,7 @@ public class HostGameMenu : MonoBehaviour
 			var player = playerList[i];
 			if (player.playerName == friendName)
 			{
-				// Already have that server listed nothing else to do
+				// Already have that player listed - nothing else to do
 				return;
 			}
 		}
@@ -146,9 +146,10 @@ public class HostGameMenu : MonoBehaviour
 			ListItem = GameObject.Instantiate<PlayerInServerListEntry>(playerListEntryTemplate, players.content),
 			playerName = friendName,
 			steamId = friend.Id,
+			friend = friend,
 		};
-		playerListItemData.ListItem.gameObject.SetActive(true);
 
+		playerListItemData.ListItem.gameObject.SetActive(true);
 
 		UpdateItem(playerListItemData);
 		playerListItemData.NextUpdate = Time.time + 5.0f + UnityEngine.Random.Range(0.0f, 1.0f);
@@ -157,6 +158,20 @@ public class HostGameMenu : MonoBehaviour
 		SetListItemSelected(playerListItemData, false);
 
 		RepositionItems();
+	}
+
+	private async void GetSteamAvatarAsync(PlayerInServerListItemData playerInServerListItemData)
+	{
+		await GetSteamAvatar(playerInServerListItemData);
+	}
+
+	private async Task GetSteamAvatar(PlayerInServerListItemData playerInServerListItemData)
+	{
+		var friend = playerInServerListItemData.friend;
+		var img = await friend.GetMediumAvatarAsync();
+		if (!img.HasValue)
+			return;
+		playerInServerListItemData.ListItem.steamImage.LoadTextureFromImage(img.Value);
 	}
 
 	/// <summary>
@@ -212,10 +227,9 @@ public class HostGameMenu : MonoBehaviour
 	/// <param name="option">The server display information to update</param>
 	private void UpdateItem(PlayerInServerListItemData option)
 	{
-		// TODO:  Extract lobby info for display on the menu
-
 		option.ListItem.playerName.text = option.playerName;
 		option.ListItem.playerSteamId.text = option.steamId.Value.ToString();
+		GetSteamAvatarAsync(option);
 	}
 
 	private void RefreshPlayers()
@@ -229,11 +243,13 @@ public class HostGameMenu : MonoBehaviour
 
 		playButton.enabled = numInLobby > 0;
 	}
+
 }
 
 internal class PlayerInServerListItemData
 {
 	public string playerName;
+	public Friend friend;
 	public SteamId steamId;
 	public float NextUpdate;
 	public PlayerInServerListEntry ListItem;
