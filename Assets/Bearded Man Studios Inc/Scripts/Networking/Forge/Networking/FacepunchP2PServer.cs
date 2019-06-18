@@ -138,7 +138,7 @@ namespace BeardedManStudios.Forge.Networking
 			try
 			{
 				SteamId selfSteamId = SteamClient.SteamId;
-				Client = new CachedFacepunchP2PClient(selfSteamId);
+				Client = new CachedFacepunchP2PClient(selfSteamId, true);
 				Me = new NetworkingPlayer(ServerPlayerCounter++, selfSteamId, true, this)
 				{
 					InstanceGuid = InstanceGuid.ToString()
@@ -275,6 +275,18 @@ namespace BeardedManStudios.Forge.Networking
 		{
 			steamPlayers.Remove(player.SteamID);
 			OnPlayerDisconnected(player);
+
+			// TESTING STEAM NETWORKING DISCONNECTION CODE HERE INSTEAD OF IN THE CACHED CLIENT
+			if (!SteamNetworking.CloseP2PSessionWithUser(player.SteamID))
+			{
+				if (player.SteamID != SteamClient.SteamId)
+					Logging.BMSLog.LogWarning("Could not close P2P Session with user: " + player.SteamID.Value);
+			}
+			else
+			{
+				Logging.BMSLog.Log("Closed P2PSession with user: " + player.SteamID.Value.ToString());
+			}
+			// END TEST ZONE
 
 			if (forced)
 				ForcedDisconnectingPlayers.Remove(player);

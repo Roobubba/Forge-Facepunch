@@ -11,6 +11,8 @@ namespace BeardedManStudios.Forge.Networking
 {
 	public class CachedFacepunchP2PClient : IDisposable
 	{
+		public bool isHost = false;
+
 		private bool disposed = false;
 		private bool active = false;
 		protected bool Active
@@ -29,14 +31,17 @@ namespace BeardedManStudios.Forge.Networking
 			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
 		}*/
 
-		public CachedFacepunchP2PClient(SteamId endPoint)
+		public CachedFacepunchP2PClient(SteamId endPoint, bool hosting = false)
 		{
+			isHost = hosting;
+
 			// Listen for clients wishing to start P2PConnections
-			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
+			if (isHost)
+				SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
+
 			SteamNetworking.OnP2PConnectionFailed += OnP2PConnectionFailed;
 			steamEndPoint = endPoint;
 			recBuffer.SetSize(65536);
-
 		}
 
 		/// <summary>
@@ -65,6 +70,7 @@ namespace BeardedManStudios.Forge.Networking
 				from = packet.Value.SteamId;
 				recBuffer.SetSize(packet.Value.Data.Length);
 				recBuffer.byteArr = packet.Value.Data;
+				//Logging.BMSLog.Log("packet received from " + from.Value.ToString() + ". Length = " + packet.Value.Data.Length);
 				return recBuffer;
 			}
 
@@ -86,6 +92,10 @@ namespace BeardedManStudios.Forge.Networking
 			{
 				Logging.BMSLog.LogWarningFormat("CachedSteamP2PClient:DoSend() WARNING: Unable to send packet to {0}", steamId.Value);
 			}
+			//else
+			//{
+			//	Logging.BMSLog.Log("packet sent to " + steamId.Value.ToString() + ". Length = " + bytes);
+			//}
 
 			return 0;
 		}
@@ -149,7 +159,7 @@ namespace BeardedManStudios.Forge.Networking
 
 			disposed = true;
 
-			if (disposing)
+			if (disposing && isHost)
 			{
 				// Dispose of Steam P2P Socket
 				if (!SteamNetworking.CloseP2PSessionWithUser(steamEndPoint))
@@ -157,8 +167,14 @@ namespace BeardedManStudios.Forge.Networking
 					if (steamEndPoint != SteamClient.SteamId)
 						Logging.BMSLog.LogWarning("Could not close P2P Session with user: " + steamEndPoint.Value);
 				}
+				else
+				{
+					Logging.BMSLog.Log("Closed P2PSession with user: " + steamEndPoint.Value.ToString());
+				}
 			}
-			SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
+
+			if (isHost)
+				SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
 			SteamNetworking.OnP2PConnectionFailed -= OnP2PConnectionFailed;
 		}
 

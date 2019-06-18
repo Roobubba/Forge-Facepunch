@@ -283,8 +283,10 @@ public class NetworkController : Controller
 		{
 			connectionText.text = info;
 		}
+
 		networkManager = GetNetworkManager();
 		steamP2PClient = new FacepunchP2PClient();
+		networkManager.Initialize(steamP2PClient);
 		((FacepunchP2PClient)steamP2PClient).bindSuccessful += OnClientBindSuccessful;
 		((FacepunchP2PClient)steamP2PClient).serverAccepted += OnClientServerAccepted;
 		((FacepunchP2PClient)steamP2PClient).disconnected += OnClientDisconnected;
@@ -292,7 +294,7 @@ public class NetworkController : Controller
 
 		// Moved initialize after Connect() call and callbacks and this along with the 1 cycle delay on setting up the ReadNetwork thread seems to stop the
 		// SteamNetworking NRE problems.
-		networkManager.Initialize(steamP2PClient);
+		//networkManager.Initialize(steamP2PClient);
 		Connected(steamP2PClient);
 	}
 

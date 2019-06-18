@@ -20,6 +20,7 @@ public class JoinGameMenu : MonoBehaviour {
 	private float serverListEntryTemplateHeight;
 	private float nextListUpdateTime = 0f;
 	private NetworkController networkController;
+	private bool blockConnection = false;
 
 	private void Start()
 	{
@@ -54,6 +55,11 @@ public class JoinGameMenu : MonoBehaviour {
 
 	public void ConnectButton()
 	{
+		if (blockConnection)
+			return;
+
+		DisableConnectButton();
+
 		if (selectedServer >= serverList.Count)
 		{
 			connectButton.enabled = false;
@@ -69,6 +75,8 @@ public class JoinGameMenu : MonoBehaviour {
 	/// <param name="baseEventData"></param>
 	public void OnServerItemPointerClick(BaseEventData baseEventData)
 	{
+		if (blockConnection)
+			return;
 		var eventData = (PointerEventData)baseEventData;
 		for (int i = 0; i < serverList.Count; ++i)
 		{
@@ -77,10 +85,30 @@ public class JoinGameMenu : MonoBehaviour {
 
 			SetSelectedServer(i);
 			if (eventData.clickCount == 2)
+			{
 				networkController.ConnectToLobby(serverList[i].lobby);
+				DisableConnectButton();
+			}
 
 			return;
 		}
+	}
+
+	/// <summary>
+	/// Resets the connect button and event click handler to allow client connections again
+	/// </summary>
+	public void EnableConnectButton()
+	{
+		DisableConnectButton(true);
+	}
+
+	/// <summary>
+	/// Stops further connection attempts to allow a single connection to finish
+	/// </summary>
+	/// <param name="unblock">Set to true to reset the menu</param>
+	private void DisableConnectButton(bool unblock = false)
+	{
+		blockConnection = !unblock;
 	}
 
 	/// <summary>
@@ -209,12 +237,28 @@ public class JoinGameMenu : MonoBehaviour {
 			return;
 		}
 
+		var serversToKeep = new HashSet<Steamworks.Data.Lobby>();
+
 		foreach (var lobby in lobbyList)
 		{
 			if (lobby.GetData("FNR-FP") == "blob")
 			{
 				AddServer(lobby);
+				serversToKeep.Add(lobby);
 			}
+		}
+
+		var serversToRemove = new HashSet<FacepunchServerListItemData>();
+
+		foreach (var entry in serverList)
+		{
+			if (!serversToKeep.Contains(entry.lobby))
+				serversToRemove.Add(entry);
+		}
+
+		foreach (var entry in serversToRemove)
+		{
+			RemoveServer(entry);
 		}
 	}
 }

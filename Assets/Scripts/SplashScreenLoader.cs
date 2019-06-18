@@ -52,6 +52,11 @@ public class SplashScreenLoader : MonoBehaviour {
 		LevelManager.LoadMainMenu();
 	}
 
+	private void OnDestroy()
+	{
+		SteamClient.Shutdown();
+	}
+
 	private void OnApplicationQuit()
 	{
 		SteamClient.Shutdown();
