@@ -52,10 +52,8 @@ public class SplashScreenLoader : MonoBehaviour {
 		LevelManager.LoadMainMenu();
 	}
 
-	private void OnDestroy()
+	private void OnApplicationQuit()
 	{
-		BeardedManStudios.Forge.Logging.BMSLog.Log("Shutting down SteamClient");
 		SteamClient.Shutdown();
 	}
-
 }

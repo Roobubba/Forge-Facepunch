@@ -647,8 +647,6 @@ namespace BeardedManStudios.Forge.Networking
 		/// <param name="requestorSteamId">Incoming P2P request</param>
 		private void OnP2PSessionRequest(SteamId requestorSteamId)
 		{
-			// TODO:  Add logic to check/filter incoming P2Prequests?
-
 			if (!SteamNetworking.AcceptP2PSessionWithUser(requestorSteamId))
 			{
 				Logging.BMSLog.LogWarning("Could not accept P2P Session with User: " + requestorSteamId.Value);
