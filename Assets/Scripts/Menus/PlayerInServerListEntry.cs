@@ -5,4 +5,5 @@ public class PlayerInServerListEntry : MonoBehaviour
 {
 	public Text playerName;
 	public Text playerSteamId;
+	public SteamImage steamImage;
 }
