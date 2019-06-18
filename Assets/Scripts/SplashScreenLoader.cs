@@ -22,7 +22,7 @@ public class SplashScreenLoader : MonoBehaviour {
 	}
 
 	void Start()
-    {
+	{
 		try
 		{
 			BeardedManStudios.Forge.Logging.BMSLog.Log("Initialising Steam Client");

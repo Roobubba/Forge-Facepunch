@@ -23,15 +23,20 @@ namespace BeardedManStudios.Forge.Networking
 		private BMSByte recBuffer = new BMSByte();
 		private Dictionary<EndPoint, string> connections = new Dictionary<EndPoint, string>();
 
-		public CachedFacepunchP2PClient()
+		/*public CachedFacepunchP2PClient()
 		{
-
-		}
+			// Listen for clients wishing to start P2PConnections
+			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
+		}*/
 
 		public CachedFacepunchP2PClient(SteamId endPoint)
 		{
+			// Listen for clients wishing to start P2PConnections
+			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
+			SteamNetworking.OnP2PConnectionFailed += OnP2PConnectionFailed;
 			steamEndPoint = endPoint;
 			recBuffer.SetSize(65536);
+
 		}
 
 		/// <summary>
@@ -103,6 +108,28 @@ namespace BeardedManStudios.Forge.Networking
 		}
 
 		/// <summary>
+		/// Callback for SteamNetworking.OnP2PSessionRequest
+		/// Accepts all incoming connections
+		/// </summary>
+		/// <param name="requestorSteamId">Incoming P2P request</param>
+		private void OnP2PSessionRequest(SteamId requestorSteamId)
+		{
+			if (!SteamNetworking.AcceptP2PSessionWithUser(requestorSteamId))
+			{
+				Logging.BMSLog.LogWarning("Could not accept P2P Session with User: " + requestorSteamId.Value);
+			}
+		}
+
+		/// <summary>
+		/// Callback for SteamNetworking.OnP2PConnectionFailed
+		/// </summary>
+		/// <param name="remoteSteamId">SteamId of the remote peer</param>
+		private void OnP2PConnectionFailed(SteamId remoteSteamId)
+		{
+			Logging.BMSLog.Log("OnP2PConnectionFailed called. Remote steamId: " + remoteSteamId.Value.ToString());
+		}
+
+		/// <summary>
 		/// On disposal of this CachedFacepunchP2PClient IDisposable object
 		/// </summary>
 		void IDisposable.Dispose()
@@ -131,6 +158,8 @@ namespace BeardedManStudios.Forge.Networking
 						Logging.BMSLog.LogWarning("Could not close P2P Session with user: " + steamEndPoint.Value);
 				}
 			}
+			SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
+			SteamNetworking.OnP2PConnectionFailed -= OnP2PConnectionFailed;
 		}
 
 		~CachedFacepunchP2PClient()

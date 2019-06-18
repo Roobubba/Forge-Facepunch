@@ -136,16 +136,13 @@ public class NetworkController : Controller
 			networkManager = GetNetworkManager();
 		}
 
-		steamP2PServer = new FacepunchP2PServer(4);
+		steamP2PServer = new FacepunchP2PServer(64);
 		networkManager.Initialize(steamP2PServer);
 		((FacepunchP2PServer)steamP2PServer).playerTimeout += OnServerPlayerTimeout;
 		((FacepunchP2PServer)steamP2PServer).playerConnected += OnServerPlayerConnected;
 		((FacepunchP2PServer)steamP2PServer).playerAccepted += OnServerPlayerAccepted;
 		((FacepunchP2PServer)steamP2PServer).playerDisconnected += OnServerPlayerDisconnected;
 		((FacepunchP2PServer)steamP2PServer).disconnected += OnServerDisconnected;
-		BMSLog.Log("Starting Host fuction");
-		((FacepunchP2PServer)steamP2PServer).Host();
-		Connected(steamP2PServer);
 		CreateLobbyAsync();
 	}
 
@@ -168,6 +165,10 @@ public class NetworkController : Controller
 		lobbyVal.SetPublic();
 		lobbyVal.SetData("FNR-FP","blob");
 		this.lobby = lobbyVal;
+
+		BMSLog.Log("Starting Host fuction");
+		((FacepunchP2PServer)steamP2PServer).Host();
+		Connected(steamP2PServer);
 
 		//Load 02aLobbyHost scene
 		levelManager.LoadLevel("02aLobbyHost");

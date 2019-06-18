@@ -27,12 +27,9 @@ namespace BeardedManStudios.Forge.Networking
 
 		public FacepunchP2PServer(int maxConnections) : base(maxConnections)
 		{
-			AcceptingConnections = true;
+			StartAcceptingConnections();
 			BannedAddresses = new List<string>();
 			commonServerLogic = new CommonServerLogic(this);
-
-			// Listen for clients wishing to start P2PConnections
-			SteamNetworking.OnP2PSessionRequest += OnP2PSessionRequest;
 		}
 
 		/// <summary>
@@ -187,8 +184,7 @@ namespace BeardedManStudios.Forge.Networking
 		{
 			// Since we are disconnecting we need to stop the read thread
 			Logging.BMSLog.Log("<color=cyan>FacepunchP2P server disconnecting...</color>");
-
-			SteamNetworking.OnP2PSessionRequest -= OnP2PSessionRequest;
+			StopAcceptingConnections();
 			readThreadCancel = true;
 
 			lock (Players)
@@ -647,19 +643,6 @@ namespace BeardedManStudios.Forge.Networking
 		public void StartAcceptingConnections()
 		{
 			AcceptingConnections = true;
-		}
-
-		/// <summary>
-		/// Callback for SteamNetworking.OnP2PSessionRequest
-		/// Accepts all incoming connections
-		/// </summary>
-		/// <param name="requestorSteamId">Incoming P2P request</param>
-		private void OnP2PSessionRequest(SteamId requestorSteamId)
-		{
-			if (!SteamNetworking.AcceptP2PSessionWithUser(requestorSteamId))
-			{
-				Logging.BMSLog.LogWarning("Could not accept P2P Session with User: " + requestorSteamId.Value);
-			}
 		}
 
 		/// <summary>
