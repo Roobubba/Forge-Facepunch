@@ -234,14 +234,29 @@ public class HostGameMenu : MonoBehaviour
 
 	private void RefreshPlayers()
 	{
-		int numInLobby = 0;
+		var friends = new List<Friend>();
 		foreach (var friend in lobby.Members)
 		{
+			friends.Add(friend);
 			AddPlayer(friend);
-			numInLobby++;
 		}
 
-		playButton.enabled = numInLobby > 0;
+		playButton.enabled = friends.Count > 0;
+
+		var friendsToDelete = new List<PlayerInServerListItemData>();
+
+		foreach (var player in playerList)
+		{
+			if (!friends.Contains(player.friend))
+			{
+				friendsToDelete.Add(player);
+			}
+		}
+
+		foreach (var entry in friendsToDelete)
+		{
+			RemovePlayer(entry);
+		}
 	}
 
 }

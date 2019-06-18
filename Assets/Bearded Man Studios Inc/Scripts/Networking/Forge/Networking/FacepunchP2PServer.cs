@@ -305,7 +305,16 @@ namespace BeardedManStudios.Forge.Networking
 
 				try
 				{
-					packet = Client.Receive(out messageFrom);
+					if (SteamNetworking.IsP2PPacketAvailable())
+					{
+						packet = Client.Receive(out messageFrom);
+					}
+					else
+					{
+						Thread.Sleep(1);
+						continue;
+					}
+
 					if (messageFrom == default(SteamId))
 					{
 						Thread.Sleep(1);
